@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <title>Мониторинг параметров</title>
+  </head>
+  <body>
+    <h1>Текущее значение параметра: <span id="current-value">Загрузка...</span></h1>
+    <div id="graph"></div>
+  </body>
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</html>
