@@ -1,14 +1,72 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #current-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        #graph {
+            width: 90%;
+            max-width: 800px;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
     <title>Мониторинг параметров</title>
-  </head>
-  <body>
-    <h1>Текущее значение параметра: <span id="current-value">Загрузка...</span></h1>
-    <div id="graph"></div>
-  </body>
-  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Текущее значение параметра: <span id="current-value">Загрузка...</span></h1>
+        <div id="graph"></div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        async function fetchCurrentValue() {
+            const response = await fetch('/current_value');
+            const data = await response.json();
+            document.getElementById('current-value').innerText = data.value;
+        }
+
+        async function fetchGraphData() {
+            const response = await fetch('/last_hour_data');
+            const graphHtml = await response.text();
+            document.getElementById('graph').innerHTML = graphHtml;
+        }
+
+        setInterval(fetchCurrentValue, 1000);
+        setInterval(fetchGraphData, 60000);
+
+        fetchCurrentValue();
+        fetchGraphData();
+    </script>
+</body>
 </html>
